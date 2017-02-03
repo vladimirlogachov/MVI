@@ -1,4 +1,4 @@
-# Model-View-Intent
+# Model-View-Intent [ ![Download](https://api.bintray.com/packages/viptakeiteasy/maven/MVI/images/download.svg) ](https://bintray.com/viptakeiteasy/maven/MVI/_latestVersion)
 Library which allows to apply MVI architecture in your apps.
 
 # Gratitude
