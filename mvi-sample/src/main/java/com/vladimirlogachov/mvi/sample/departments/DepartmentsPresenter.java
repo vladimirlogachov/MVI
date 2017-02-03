@@ -63,16 +63,6 @@ public class DepartmentsPresenter extends MviBasePresenter<DepartmentsView, Depa
     }
 
     @Override
-    protected ViewStateConsumer<DepartmentsView, DepartmentsViewState> provideViewStateConsumer() {
-        return new ViewStateConsumer<DepartmentsView, DepartmentsViewState>() {
-            @Override
-            public void apply(@NonNull DepartmentsView view, @NonNull DepartmentsViewState viewState) {
-                view.render(viewState);
-            }
-        };
-    }
-
-    @Override
     protected void releaseData() {
         super.releaseData();
         Log.d(TAG, "releaseData: ");
@@ -121,5 +111,10 @@ public class DepartmentsPresenter extends MviBasePresenter<DepartmentsView, Depa
                     .build();
         else
             return previousState;
+    }
+
+    @Override
+    public void apply(@NonNull DepartmentsView view, @NonNull DepartmentsViewState viewState) {
+        view.render(viewState);
     }
 }

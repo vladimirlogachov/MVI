@@ -7,18 +7,12 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 
-public abstract class MviBasePresenter<V, VS> implements MviPresenter<V> {
+public abstract class MviBasePresenter<V, VS> implements MviPresenter<V>, StateConsumer<V, VS> {
 
     /**
      * Binds a single action intent to view.
      */
     protected interface ActionIntentBinder<V, I> extends IntentBinder<V, I> {
-    }
-
-    /**
-     * Applies last view state to attached view.
-     */
-    protected interface ViewStateConsumer<V, VS> extends StateConsumer<V, VS> {
     }
 
     /**
@@ -68,13 +62,6 @@ public abstract class MviBasePresenter<V, VS> implements MviPresenter<V> {
     protected abstract Observable<VS> provideViewStateObservable();
 
     /**
-     * Called once to provide view state consumer,
-     * after first {@link MviPresenter#onViewAttached(Object)} call.
-     * @return the view state consumer.
-     */
-    protected abstract ViewStateConsumer<V, VS> provideViewStateConsumer();
-
-    /**
      * Called once to clean data, when presenter will be destroyed.
      */
     @CallSuper
@@ -86,7 +73,7 @@ public abstract class MviBasePresenter<V, VS> implements MviPresenter<V> {
     @Override
     public void onViewAttached(V view) {
         if (isFirstAttachment)
-            subscribeToViewStateChanges(provideViewStateObservable(), provideViewStateConsumer());
+            subscribeToViewStateChanges(provideViewStateObservable());
 
         actionIntentsHolder.bindActionIntents(view);
         viewStateSubscriber.subscribeToView(view);
@@ -119,9 +106,8 @@ public abstract class MviBasePresenter<V, VS> implements MviPresenter<V> {
     /**
      * Subscribes to the view state changes.
      * @param viewStateObservable the view state observable.
-     * @param consumer the view state consumer.
      */
-    private void subscribeToViewStateChanges(@NonNull Observable<VS> viewStateObservable, @NonNull ViewStateConsumer<V, VS> consumer) {
-        viewStateSubscriber.subscribeToViewStateChanges(viewStateObservable, consumer);
+    private void subscribeToViewStateChanges(@NonNull Observable<VS> viewStateObservable) {
+        viewStateSubscriber.subscribeToViewStateChanges(viewStateObservable, this);
     }
 }

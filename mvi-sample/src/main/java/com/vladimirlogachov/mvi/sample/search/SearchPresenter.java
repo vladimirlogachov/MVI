@@ -42,26 +42,21 @@ class SearchPresenter extends MviBasePresenter<SearchView, SearchViewState> {
     }
 
     @Override
-    protected ViewStateConsumer<SearchView, SearchViewState> provideViewStateConsumer() {
-        return new ViewStateConsumer<SearchView, SearchViewState>() {
-            @Override
-            public void apply(@NonNull SearchView view, @NonNull SearchViewState viewState) {
-                if (viewState.isDefaultState())
-                    view.defaultState();
-                else if (viewState.isLoadingState())
-                    view.loadingState();
-                else if (viewState.isErrorState())
-                    view.errorState(viewState.getError());
-                else if (viewState.isEmptyState())
-                    view.emptyState();
-                else if (viewState.isResultState())
-                    view.resultState(viewState.getResult());
-            }
-        };
+    protected void releaseData() {
+        super.releaseData();
     }
 
     @Override
-    protected void releaseData() {
-        super.releaseData();
+    public void apply(@NonNull SearchView view, @NonNull SearchViewState viewState) {
+        if (viewState.isDefaultState())
+            view.defaultState();
+        else if (viewState.isLoadingState())
+            view.loadingState();
+        else if (viewState.isErrorState())
+            view.errorState(viewState.getError());
+        else if (viewState.isEmptyState())
+            view.emptyState();
+        else if (viewState.isResultState())
+            view.resultState(viewState.getResult());
     }
 }
