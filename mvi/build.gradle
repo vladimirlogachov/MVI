@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -8,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -19,6 +20,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+publish {
+    groupId = 'com.github.vladimirlogachov'
+    artifactId = 'mvi'
+    publishVersion = '0.1.0'
+    desc = 'Library which allows to apply MVI architecture in your apps.'
+    licences = ['Apache-2.0']
+    uploadName='MVI'
+    website = 'https://github.com/vladimirlogachov/MVI'
 }
 
 dependencies {

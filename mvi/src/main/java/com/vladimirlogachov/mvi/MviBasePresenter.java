@@ -46,7 +46,7 @@ public abstract class MviBasePresenter<V, VS> implements MviPresenter<V> {
 
     /**
      * Called once to provide view state observable.
-     * <br/>
+     * <br>
      * To construct view state observable, you <b>must</b> use {@link #createIntentObservable(ActionIntentBinder)}.
      <pre>
      {@code
