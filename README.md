@@ -188,7 +188,8 @@ class SearchPresenter extends MviBasePresenter<SearchView, SearchViewState> {
 private final SearchInteractor interactor;
 
     SearchPresenter(SearchInteractor interactor) {
-        super(SearchViewState.SearchNotStartedYet()); // Call parent constructor to set default ViewState, if you have such.
+        // Call parent constructor to set default ViewState, if you have such.
+        super(SearchViewState.SearchNotStartedYet()); 
         this.interactor = interactor;
     }
 
@@ -206,7 +207,8 @@ private final SearchInteractor interactor;
       return searchIntent.switchMap(new Function<String, ObservableSource<? extends SearchViewState>>() {
                     @Override
                     public ObservableSource<? extends SearchViewState> apply(String s) throws Exception {
-                        return interactor.search(s); // Starts searching each time, when query string is changed.
+                        // Starts searching each time, when query string is changed.
+                        return interactor.search(s); 
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
