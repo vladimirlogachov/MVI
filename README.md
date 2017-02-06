@@ -32,16 +32,19 @@ There are could be several ways how to implement it. I'll show you only two of p
 
 ##### Single method to render ViewState:
 ```Java
+
 interface MyView {
  Observable<Boolean> loadDataIntent();
  void render(MyViewState viewState);
 }
+
 ```
 
 There are only two methods. loadDataIntent() provides intent to presenter and render(), which is called to display current state. If you don't like such implementation of View interface, you may be interested in the next one.
 
 ##### Multiple methods to render ViewState:
 ```Java
+
 interface MyView {
   Observable<String> searchIntent();
   void loadingState();
@@ -50,6 +53,7 @@ interface MyView {
   void resultState(List<Node> matches);
   // and so on, as many as you wish...
 }
+
 ```
 
 By the way, there is could be more than one method to provide intent to presenter.
@@ -59,6 +63,7 @@ By the way, there is could be more than one method to provide intent to presente
 There is could be many ways to implement it. All you need is to remember, that it **must** represent exactly the current state of a view. So let's look at several examples.
 
 ```Java
+
 class MyViewState {
   private final boolean loading;
   private final Throwable error;
@@ -91,11 +96,13 @@ class MyViewState {
     return data;
   }
 } 
+
 ```
 Feel free to use Builder or Fabric pattern in such case.
 
 Another way to implement ViewState is using of an interface.
 ```Java
+
 interface ViewState {
 
 }
@@ -131,6 +138,7 @@ final class ResultState implements ViewState {
     return data;
   }
 }
+
 ```
 You may choose any approach you wish.
 
@@ -139,6 +147,7 @@ You may choose any approach you wish.
 I use such pattern, but as Hannes Dorfmann's says, it could be an Interactor, Usecase, Repository - whatever you use in your app.
 
 ```Java
+
 class SearchInteractor {
   private final Api api;
   
@@ -169,6 +178,7 @@ class SearchInteractor {
         });
   }
 }
+
 ```
 
 Basically interactor intended for mapping each step of data flow into a ViewState and its delivering to a presenter.
@@ -183,6 +193,7 @@ The main hero, which couples previous parts together and responsible to provide 
 To implement presenter you must extend abstract **MviBasePresenter** class and implement two methods: provideViewStateObservable() and apply().
 
 ```Java
+
 class SearchPresenter extends MviBasePresenter<SearchView, SearchViewState> {
 
 private final SearchInteractor interactor;
@@ -235,6 +246,7 @@ private final SearchInteractor interactor;
             view.resultState(viewState.getResult());
     }
 }
+
 ```
 What's going on here? 
 
@@ -296,6 +308,7 @@ Next example shows you case, when you have more than one action intent.
         });
     }
 ...
+
 ```
 
 Here we've got two action intents, which are merged into single ViewState observable. In order two reduce ViewState we use **scan(InitValue, Accumulator)** method. Remember to use **createIntentObservable(ActionIntentBinder)** each time, you need to add an intent. [Detailed example](https://github.com/vladimirlogachov/MVI/blob/master/mvi-sample/src/main/java/com/vladimirlogachov/mvi/sample/departments/DepartmentsPresenter.java). 
@@ -379,6 +392,7 @@ public class SearchFragment extends Fragment
 
     ...
 }
+
 ```
 [Detailed example](https://github.com/vladimirlogachov/MVI/blob/master/mvi-sample/src/main/java/com/vladimirlogachov/mvi/sample/search/SearchFragment.java).
 
@@ -389,6 +403,7 @@ Use it in order to save presenter instance, during Activity/Fragment instance re
 To create one, you must extend **MviPresenterLoader** abstract class.
 
 ```Java
+
 class SearchPresenterLoader extends MviPresenterLoader<SearchPresenter> {
     
     SearchPresenterLoader(Context context) {
@@ -400,6 +415,7 @@ class SearchPresenterLoader extends MviPresenterLoader<SearchPresenter> {
         return new SearchPresenter(new SearchInteractor(new SearchEngine()));
     }
 }
+
 ```
 
 There is one abstract method **createPresenter()**, which provides presenter instance to the loader.
@@ -407,6 +423,7 @@ There is one abstract method **createPresenter()**, which provides presenter ins
 Then in your Activity/Fragment initialize the loader.
 
 ```Java
+
 public class SearchFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<SearchPresenter>, MySearchView {
 
@@ -439,6 +456,7 @@ public class SearchFragment extends Fragment
     
     ....
 }
+
 ```
 Now you will always have valid presenter instance.
 
